@@ -19,11 +19,18 @@
     --gold:#E3B341; --gold-soft:#3a3216;
     --c1:#FF6B6B; --c2:#4DABF7; --c3:#51CF66; --c4:#B197FC; --c5:#FFA94D; --c6:#38D9C9;
     --radius:14px;
+    --grad:#1d2029; --stick:rgba(21,23,29,.94);
+  }
+  html[data-theme="light"]{
+    --bg:#F6F3EC; --bg2:#FFFFFF; --surface:#FFFFFF; --surface2:#F1EDE3;
+    --line:#E2DCCE; --text:#20242C; --muted:#6B7280; --faint:#A39C8E;
+    --gold:#A87C1F; --gold-soft:#efe6cc;
+    --grad:#efe9dc; --stick:rgba(246,243,236,.94);
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
-    background:radial-gradient(120% 80% at 50% -10%, #1d2029 0%, var(--bg) 60%) fixed;
+    background:radial-gradient(120% 80% at 50% -10%, var(--grad) 0%, var(--bg) 60%) fixed;
     color:var(--text); font-family:"Inter",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased; line-height:1.5; padding-bottom:64px;
   }
@@ -37,7 +44,7 @@
     border-radius:999px;padding:5px;margin:18px 0 6px;width:fit-content}
   .modes button{appearance:none;border:0;background:transparent;color:var(--muted);
     font:inherit;font-weight:600;font-size:14px;padding:8px 18px;border-radius:999px;cursor:pointer;transition:.15s}
-  .modes button[aria-pressed=true]{background:var(--text);color:#15171D}
+  .modes button[aria-pressed=true]{background:var(--text);color:var(--bg)}
   .modes button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
   .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
@@ -63,7 +70,7 @@
     cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
   .chip .dot{width:11px;height:11px;border-radius:50%;flex:none}
   .chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-  .chip[aria-pressed=true]{color:#15171D}
+  .chip[aria-pressed=true]{color:var(--bg)}
   .chip.todos[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:#1c1708}
 
   .ctxrow{display:flex;align-items:center;gap:10px;margin:4px 0 10px;color:var(--muted);font-size:13px}
@@ -145,6 +152,38 @@
   .stp:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   .repval{min-width:36px;text-align:center;font-weight:700;color:var(--gold)}
 
+  /* seção (Intro/Verso/Refrão) */
+  .section{font-family:"Fraunces",serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);font-weight:600;margin:18px 0 4px}
+  .section:first-child{margin-top:2px}
+  /* metadados, áudio e observações */
+  .meta{display:flex;flex-wrap:wrap;gap:7px 14px;margin:10px 0 2px;font-size:13px;color:var(--muted)}
+  .meta b{color:var(--text);font-weight:600}
+  .meta .pill{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 11px}
+  .audiobox{margin:12px 0 4px}
+  .audiobox audio{width:100%;height:40px}
+  .notesbox{margin:18px 0 0;padding:12px 14px;border-left:3px solid var(--gold);
+    background:var(--surface);border-radius:0 10px 10px 0;font-size:14px;color:var(--text)}
+  .notesbox b{color:var(--gold)}
+  /* barra 2 (tema / navegação) */
+  .bar2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:-4px 0 4px}
+  /* repertório */
+  .repertorio .item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .repertorio .item:last-child{border-bottom:0}
+  .repertorio .nm{flex:1;font-weight:600;cursor:pointer;font-size:15px}
+  .repertorio .nm.active{color:var(--gold)}
+  .repertorio .ord{font-size:12px;color:var(--faint);width:20px;text-align:center}
+  /* marcação rápida */
+  .quickbar{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:12px}
+  .quickbar .qlbl{font-size:13px;color:var(--muted);font-weight:600;display:block;margin-bottom:8px}
+  .quickbar.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .editline.qhot .txt{cursor:pointer;border-radius:8px;padding:4px 8px;margin:-4px -8px 9px;outline:1px dashed var(--line)}
+  .secrow{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .secrow input{flex:1;min-width:140px;padding:8px 11px;font-size:14px}
+  .minibtn{appearance:none;border:1px solid var(--line);background:var(--bg2);color:var(--muted);
+    width:34px;height:34px;border-radius:9px;font-size:15px;cursor:pointer;flex:none}
+  .minibtn:hover{color:var(--text)}
+
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
   /* ===== mobile-first / app ===== */
@@ -155,7 +194,7 @@
 
   .stickyfilter{ position:sticky; top:0; z-index:30;
     margin:8px -16px 0; padding:10px 16px 8px;
-    background:rgba(21,23,29,.94); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    background:var(--stick); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line); }
   .stickyfilter .chips{ margin:0; }
 
@@ -213,6 +252,11 @@
   #printSheet .p-rep{font-weight:800;color:#9a7b2e;margin-left:8px;font-size:.82em}
   #printSheet .p-repmark{color:#9a7b2e;font-weight:700;font-size:12px;letter-spacing:.05em;margin:2px 0 0 2px}
   #printSheet .p-repmark::before{content:"\21BA  "}
+  #printSheet .p-section{font-family:"Fraunces",serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    color:#9a7b2e;font-weight:600;margin:14px 0 3px}
+  #printSheet .p-meta2{font-size:11px;color:#6b6b6b;margin-top:4px}
+  #printSheet .p-notes{margin-top:18px;padding:10px 13px;border-left:2.5px solid #9a7b2e;
+    background:#faf7ef;font-size:12.5px;color:#3a3a3a}
 </style>
 
 <div class="wrap">
@@ -227,9 +271,12 @@
 
   <!-- SONG SWITCHER -->
   <div class="bar">
-    <select id="songSel" aria-label="Música" style="flex:1;min-width:140px"></select>
+    <button class="btn sm" id="prevSong" aria-label="Música anterior" title="Anterior">◀</button>
+    <select id="songSel" aria-label="Música" style="flex:1;min-width:120px"></select>
+    <button class="btn sm" id="nextSong" aria-label="Próxima música" title="Próxima">▶</button>
     <button class="btn sm" id="newSong">+ Nova</button>
     <button class="btn sm" id="printBtn">Imprimir</button>
+    <button class="btn sm" id="themeBtn" aria-label="Alternar tema" title="Tema claro/escuro">☾</button>
     <button class="btn sm" id="fsBtn" aria-label="Tela cheia" title="Tela cheia">⛶</button>
   </div>
 
@@ -249,7 +296,10 @@
       <summary>O que significam os símbolos?</summary>
       <div class="leg"><b>●</b> entrada · <b>✚</b> todos · <b>▲</b> crescer · <b>▼</b> diminuir · <b>~</b> sustentar · <b>‖</b> respiro</div>
     </details>
+    <div class="meta" id="songMeta"></div>
+    <div class="audiobox" id="audioBox"></div>
     <div class="lyrics" id="lyricsOut"></div>
+    <div id="songNotes"></div>
   </section>
 
   <!-- ===== EDIT MODE ===== -->
@@ -267,12 +317,35 @@
         <label class="fld" for="titleIn">Nome da música</label>
         <input type="text" id="titleIn" placeholder="Ex.: Quando Eu Oro">
       </div>
+      <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:90px"><label class="fld" for="keyIn">Tom</label>
+          <input type="text" id="keyIn" placeholder="Ex.: G"></div>
+        <div style="flex:1;min-width:90px"><label class="fld" for="bpmIn">BPM</label>
+          <input type="text" id="bpmIn" placeholder="Ex.: 72" inputmode="numeric"></div>
+        <div style="flex:2;min-width:140px"><label class="fld" for="leadIn">Quem puxa</label>
+          <input type="text" id="leadIn" placeholder="Ex.: Bruna"></div>
+      </div>
+      <div class="row">
+        <label class="fld" for="audioIn">Link de áudio de referência (mp3 toca aqui; YouTube abre em nova aba)</label>
+        <input type="text" id="audioIn" placeholder="Cole o link da gravação…">
+      </div>
+      <div class="row">
+        <label class="fld" for="notesIn">Observações / final (ex.: “Refrão 3× no final”, “volta ao refrão”, Coda)</label>
+        <input type="text" id="notesIn" placeholder="Ex.: Refrão 3× e finaliza suave">
+      </div>
       <div class="row">
         <label class="fld" for="lyricsIn">Cole a letra aqui (uma frase por linha; deixe uma linha em branco entre as estrofes)</label>
         <textarea id="lyricsIn" placeholder="Cole a letra…"></textarea>
       </div>
       <button class="btn primary" id="loadLyrics">Carregar letra</button>
+      <button class="btn sm ghost" id="dupSong" style="margin-left:8px">Duplicar música</button>
       <span id="loadWarn" style="color:var(--muted);font-size:13px;margin-left:10px"></span>
+    </div>
+
+    <div class="card">
+      <h2>Repertório / ordem do culto</h2>
+      <p class="hint">Arraste pela ordem com ↑ ↓. Toque no nome para abrir. No modo Cantar, use ◀ ▶ para passar de uma para outra.</p>
+      <div class="repertorio" id="repList"></div>
     </div>
 
     <div class="card">
@@ -284,7 +357,8 @@
 
     <div class="card">
       <h2>Quem canta cada parte</h2>
-      <p class="hint">Em cada linha, toque em <b>Todos</b> ou nos nomes de quem canta. Use a <b>Marcação</b> para a dinâmica (● ▲ ▼ ~ ‖) e <b>Repete</b> para dizer quantas vezes a frase ou a estrofe inteira se repete. (✚ aparece sozinho quando é <b>Todos</b>.)</p>
+      <p class="hint">Toque em <b>Todos</b> ou nos nomes de quem canta. <b>Marcação</b> = dinâmica (● ▲ ▼ ~ ‖); <b>Repete</b> = quantas vezes; <b>Estrofe</b> tem nome (Verso/Refrão) e setas pra reordenar.</p>
+      <div class="quickbar" id="quickBar"></div>
       <div id="assignList"></div>
     </div>
 
@@ -319,8 +393,9 @@ const CUES = [
 ];
 const uid = () => Math.random().toString(36).slice(2,9);
 
-let data = null;       // {singers:[{id,name,color}], songs:{id:{id,title,lines:[]}}, order:[], current}
+let data = null;       // {theme, band, singers:[...], songs:{...}, order:[], current}
 let filter = "todos";  // 'todos' or singerId
+let quickTarget = null; // null | 'todos' | singerId  (marcação rápida)
 
 /* ---------- persistence (grava em todos os lugares possíveis) ---------- */
 const KEY = "louvor:v1";
@@ -351,7 +426,19 @@ function defaults(){
   const singers = ["Voz 1","Voz 2","Voz 3","Voz 4","Voz 5","Voz 6"]
     .map((n,i)=>({id:uid(),name:n,color:COLORS[i]}));
   const sid = uid();
-  return { band:"abba one", singers, songs:{[sid]:{id:sid,title:"Minha música",lines:[]}}, order:[sid], current:sid };
+  return { theme:"dark", band:"abba one", singers,
+    songs:{[sid]:{id:sid,title:"Minha música",key:"",bpm:"",lead:"",audio:"",notes:"",lines:[]}},
+    order:[sid], current:sid };
+}
+function migrate(){
+  if(!data.theme) data.theme="dark";
+  if(!data.band) data.band="abba one";
+  if(!data.order) data.order=Object.keys(data.songs);
+  Object.values(data.songs).forEach(s=>{
+    ["key","bpm","lead","audio","notes"].forEach(k=>{ if(s[k]===undefined) s[k]=""; });
+    (s.lines||[]).forEach(l=>{ if(!l.brk && l.rep===undefined) l.rep=1; });
+  });
+  if(!data.current || !data.songs[data.current]) data.current=data.order[0];
 }
 function curSong(){ return data.songs[data.current]; }
 function singerById(id){ return data.singers.find(s=>s.id===id); }
@@ -406,6 +493,7 @@ function stanzasOf(lines){
   if(cur.length) g.push(cur);
   return g;
 }
+function stanzaSection(group){ return (group[0] && group[0].section) || ""; }
 /* se todas as linhas da estrofe têm a mesma repetição > 1, retorna esse número */
 function stanzaRep(group){
   const reps=group.map(l=>l.rep||1);
@@ -430,6 +518,7 @@ function lineDiv(l, suppressPill){
   return `<div class="${cls}" style="${(!l.todos&&mine)?`border-left-color:${border}`:''}">${cueMarks(l)}${badge}${escapeHtml(l.text)}${repPill}</div>`;
 }
 function renderLyrics(){
+  renderSongExtras();
   const out = document.getElementById("lyricsOut");
   const lines = curSong().lines||[];
   const showAll = document.getElementById("showAll").checked;
@@ -445,10 +534,12 @@ function renderLyrics(){
     if(visibleInStanza.length===0) continue;
     if(shownStanza) html += `<div class="stanza"></div>`;
     shownStanza = true;
+    const sec = stanzaSection(g);
+    if(sec) html += `<div class="section">${escapeHtml(sec)}</div>`;
     const sRep = stanzaRep(g);
     for(const l of g){
       if(filter!=="todos" && !showAll && !(l.todos || l.singers.includes(filter))) continue;
-      html += lineDiv(l, sRep>0);  // se a estrofe inteira repete, esconde a pílula por linha
+      html += lineDiv(l, sRep>0);
     }
     if(sRep>0) html += `<div class="repmark">repete ${sRep}×</div>`;
   }
@@ -457,6 +548,27 @@ function renderLyrics(){
     html=`<div class="empty"><b>${escapeHtml(me?me.name:"")} não tem parte marcada nesta música.</b><br>Ative o botão acima para ver a letra inteira.</div>`;
   }
   out.innerHTML = html;
+}
+function renderSongExtras(){
+  const s = curSong();
+  // metadados
+  const m=[];
+  if(s.key)  m.push(`<span class="pill">Tom: <b>${escapeHtml(s.key)}</b></span>`);
+  if(s.bpm)  m.push(`<span class="pill">BPM: <b>${escapeHtml(s.bpm)}</b></span>`);
+  if(s.lead) m.push(`<span class="pill">Puxa: <b>${escapeHtml(s.lead)}</b></span>`);
+  document.getElementById("songMeta").innerHTML = m.join("");
+  // áudio
+  const ab=document.getElementById("audioBox");
+  if(s.audio && /^https?:\/\//i.test(s.audio)){
+    if(/\.(mp3|m4a|ogg|wav|aac)(\?.*)?$/i.test(s.audio)){
+      ab.innerHTML = `<audio controls preload="none" src="${escapeHtml(s.audio)}"></audio>`;
+    } else {
+      ab.innerHTML = `<a class="btn sm" href="${escapeHtml(s.audio)}" target="_blank" rel="noopener">▶ Ouvir referência</a>`;
+    }
+  } else ab.innerHTML="";
+  // observações / final
+  document.getElementById("songNotes").innerHTML =
+    s.notes ? `<div class="notesbox"><b>Final / observações:</b> ${escapeHtml(s.notes)}</div>` : "";
 }
 
 /* ---------- impressão ---------- */
@@ -475,6 +587,8 @@ function buildPrintSheet(){
   const groups = stanzasOf(lines);
   groups.forEach((g,gi)=>{
     if(gi>0) body+=`<div class="p-gap"></div>`;
+    const sec = stanzaSection(g);
+    if(sec) body+=`<div class="p-section">${escapeHtml(sec)}</div>`;
     const sRep = stanzaRep(g);
     let prevSig=null;
     for(const l of g){
@@ -493,6 +607,12 @@ function buildPrintSheet(){
     if(sRep>0) body+=`<div class="p-repmark">repete ${sRep}×</div>`;
   });
   if(!body) body=`<div class="p-line" style="color:#999">Sem letra carregada nesta música.</div>`;
+  const metaBits=[];
+  if(song.key)  metaBits.push("Tom "+song.key);
+  if(song.bpm)  metaBits.push(song.bpm+" BPM");
+  if(song.lead) metaBits.push("Puxa: "+song.lead);
+  const metaLine = metaBits.length ? `<div class="p-meta2">${escapeHtml(metaBits.join("  ·  "))}</div>` : "";
+  const notes = song.notes ? `<div class="p-notes"><b>Final / observações:</b> ${escapeHtml(song.notes)}</div>` : "";
   const leg = [["●","entrada"],["✚","todos"],["▲","crescer"],["▼","diminuir"],["~","sustentar"],["‖","respiro"]]
     .map(([s,t])=>`<span><b>${s}</b>${t}</span>`).join("");
   document.getElementById("printSheet").innerHTML = `
@@ -500,10 +620,12 @@ function buildPrintSheet(){
       <div class="p-band">${escapeHtml(data.band||"")}</div>
       <div class="p-title">${escapeHtml(song.title||"Sem título")}</div>
       <div class="p-meta">Mapa de vozes</div>
+      ${metaLine}
     </div>
     <div class="p-legend">${leg}</div>
     <div class="p-voices">${voices}</div>
     ${body}
+    ${notes}
     <div class="p-foot">${escapeHtml(data.band||"")} &middot; Painel de Louvor</div>`;
 }
 function renderSingers(){
@@ -525,10 +647,28 @@ function renderSingers(){
     save(); renderSingers(); renderAssign(); renderFilters();
   });
 }
+function renderQuickBar(){
+  const box=document.getElementById("quickBar");
+  if(!box) return;
+  const chips = `<button class="chip ${quickTarget===null?'':''}" data-q="off" aria-pressed="${quickTarget===null}">Desligado</button>`
+    + `<button class="chip todos" data-q="todos" aria-pressed="${quickTarget==='todos'}">Todos</button>`
+    + data.singers.map(s=>`<button class="chip" data-q="${s.id}" aria-pressed="${quickTarget===s.id}"
+        style="${quickTarget===s.id?`background:${s.color};border-color:${s.color}`:''}">
+        <span class="dot" style="background:${s.color}"></span>${escapeHtml(s.name)}</button>`).join("");
+  box.className = "quickbar" + (quickTarget!==null?" active":"");
+  box.innerHTML = `<span class="qlbl">Marcação rápida: escolha alguém e toque nas frases para atribuir de uma vez.</span>
+    <div class="chips" style="flex-wrap:wrap">${chips}</div>`;
+  box.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
+    quickTarget = b.dataset.q==="off" ? null : b.dataset.q;
+    renderAssign();
+  });
+}
 function renderAssign(){
+  renderQuickBar();
   const box=document.getElementById("assignList");
   const lines=curSong().lines||[];
   if(lines.length===0){ box.innerHTML=`<p class="hint" style="margin:0">Carregue uma letra acima para marcar as partes.</p>`; return; }
+  const quickOn = quickTarget!==null;
 
   function editLine(l){
     const tags = `<button class="tag todos" data-line="${l.id}" data-set="todos" aria-pressed="${l.todos}">Todos</button>` +
@@ -545,8 +685,8 @@ function renderAssign(){
         <span class="sym">${c.s}</span>${c.label}</button>`;
     }).join("");
     const r=l.rep||1;
-    return `<div class="editline">
-      <div class="txt">${escapeHtml(l.text)}</div>
+    return `<div class="editline ${quickOn?'qhot':''}">
+      <div class="txt" ${quickOn?`data-qline="${l.id}"`:''}>${escapeHtml(l.text)}</div>
       <div class="tags">${tags}</div>
       <div class="cuerow"><span class="cuelbl">Marcação:</span>${cueBtns}</div>
       <div class="reprow"><span class="cuelbl">Repete esta frase:</span>
@@ -558,14 +698,23 @@ function renderAssign(){
   }
 
   const groups = stanzasOf(lines);
+  const total = groups.length;
   box.innerHTML = groups.map((g,gi)=>{
     const sRep = stanzaRep(g);
     const disp = sRep>0 ? sRep+"×" : (g.every(l=>(l.rep||1)===(g[0].rep||1)) ? (g[0].rep||1)+"×" : "misto");
-    const hdr = `<div class="stanzahdr">
-      <span class="cuelbl">Estrofe ${gi+1} — repete:</span>
-      <button class="stp" data-rgrp="${gi}" data-d="-1" aria-label="menos">−</button>
-      <span class="repval">${disp}</span>
-      <button class="stp" data-rgrp="${gi}" data-d="1" aria-label="mais">+</button>
+    const sec = stanzaSection(g);
+    const hdr = `<div class="stanzahdr" style="display:block">
+      <div class="secrow">
+        <span class="cuelbl">Estrofe ${gi+1}</span>
+        <input type="text" class="secin" data-grp="${gi}" value="${escapeHtml(sec)}" placeholder="Nome (Verso, Refrão…)">
+        <button class="minibtn" data-mv="${gi}" data-dir="-1" ${gi===0?'disabled style="opacity:.35"':''} aria-label="Subir estrofe">↑</button>
+        <button class="minibtn" data-mv="${gi}" data-dir="1" ${gi===total-1?'disabled style="opacity:.35"':''} aria-label="Descer estrofe">↓</button>
+      </div>
+      <div class="reprow" style="margin-top:0"><span class="cuelbl">Estrofe inteira repete:</span>
+        <button class="stp" data-rgrp="${gi}" data-d="-1" aria-label="menos">−</button>
+        <span class="repval">${disp}</span>
+        <button class="stp" data-rgrp="${gi}" data-d="1" aria-label="mais">+</button>
+      </div>
     </div>`;
     return `<div class="stanzablock">${hdr}${g.map(editLine).join("")}</div>`;
   }).join("");
@@ -594,6 +743,30 @@ function renderAssign(){
     g.forEach(l=> l.rep=val);
     save(); renderAssign();
   });
+  // nome da seção (na primeira linha da estrofe)
+  box.querySelectorAll(".secin").forEach(inp=>inp.oninput=()=>{
+    const g = stanzasOf(curSong().lines)[parseInt(inp.dataset.grp,10)];
+    if(g && g[0]) g[0].section = inp.value;
+    save(); // não re-renderiza pra não perder o foco do campo
+  });
+  // reordenar estrofes
+  box.querySelectorAll(".minibtn[data-mv]").forEach(b=>b.onclick=()=>{
+    const gi=parseInt(b.dataset.mv,10), dir=parseInt(b.dataset.dir,10), gj=gi+dir;
+    const groups=stanzasOf(curSong().lines);
+    if(gj<0||gj>=groups.length) return;
+    [groups[gi],groups[gj]]=[groups[gj],groups[gi]];
+    const flat=[]; groups.forEach((g,i)=>{ if(i>0) flat.push({id:uid(),brk:true}); g.forEach(l=>flat.push(l)); });
+    curSong().lines=flat; save(); renderAssign();
+  });
+  // marcação rápida: clicar na frase atribui o alvo
+  if(quickOn){
+    box.querySelectorAll("[data-qline]").forEach(el=>el.onclick=()=>{
+      const line=curSong().lines.find(x=>x.id===el.dataset.qline);
+      if(quickTarget==="todos"){ line.todos=true; line.singers=[]; }
+      else{ line.todos=false; if(!line.singers.includes(quickTarget)) line.singers=[...line.singers,quickTarget]; }
+      save(); renderAssign();
+    });
+  }
 }
 
 /* ---------- mode + events ---------- */
@@ -602,8 +775,7 @@ function setMode(edit){
   document.getElementById("mEdit").setAttribute("aria-pressed",edit);
   document.getElementById("singView").classList.toggle("hide",edit);
   document.getElementById("editView").classList.toggle("hide",!edit);
-  if(edit){ document.getElementById("titleIn").value=curSong().title; renderSingers(); renderAssign(); }
-  else{ renderFilters(); renderLyrics(); }
+  refreshAll();
 }
 
 function wire(){
@@ -613,10 +785,31 @@ function wire(){
 
   document.getElementById("songSel").onchange=(e)=>{ data.current=e.target.value; filter="todos"; save(); refreshAll(); };
   document.getElementById("newSong").onclick=()=>{
-    const id=uid(); data.songs[id]={id,title:"Nova música",lines:[]}; data.order.push(id); data.current=id; filter="todos";
+    const id=uid(); data.songs[id]={id,title:"Nova música",key:"",bpm:"",lead:"",audio:"",notes:"",lines:[]};
+    data.order.push(id); data.current=id; filter="todos";
     save(); setMode(true); refreshAll();
   };
-  document.getElementById("titleIn").oninput=(e)=>{ curSong().title=e.target.value; save(); renderSongSel(); };
+  const go=(d)=>{ const i=data.order.indexOf(data.current); const j=i+d;
+    if(j<0||j>=data.order.length) return; data.current=data.order[j]; filter="todos"; save(); refreshAll(); };
+  document.getElementById("prevSong").onclick=()=>go(-1);
+  document.getElementById("nextSong").onclick=()=>go(1);
+  document.getElementById("themeBtn").onclick=()=>{
+    data.theme = (data.theme==="light") ? "dark" : "light"; applyTheme(); save();
+  };
+  document.getElementById("dupSong").onclick=()=>{
+    const s=curSong(); const id=uid();
+    const copy=JSON.parse(JSON.stringify(s));
+    copy.id=id; copy.title=(s.title||"Música")+" (cópia)";
+    copy.lines=(copy.lines||[]).map(l=>({...l,id:uid()}));
+    data.songs[id]=copy;
+    const i=data.order.indexOf(data.current);
+    data.order.splice(i+1,0,id); data.current=id;
+    save(); refreshAll();
+  };
+  const meta=(id,prop)=>document.getElementById(id).oninput=(e)=>{ curSong()[prop]=e.target.value; save();
+    if(prop==="title") renderSongSel(); };
+  meta("titleIn","title"); meta("keyIn","key"); meta("bpmIn","bpm");
+  meta("leadIn","lead"); meta("audioIn","audio"); meta("notesIn","notes");
   document.getElementById("bandIn").oninput=(e)=>{ data.band=e.target.value; save();
     document.getElementById("bandEyebrow").textContent=(data.band||"Grupo de louvor"); };
   document.getElementById("printBtn").onclick=()=>{ buildPrintSheet(); window.print(); };
@@ -669,16 +862,52 @@ function wire(){
     catch(e){ alert("Backup inválido."); }
   };
 }
-function refreshAll(){ renderSongSel(); renderFilters(); renderLyrics(); renderSingers(); renderAssign();
-  document.getElementById("titleIn").value=curSong().title;
+function renderRepertorio(){
+  const box=document.getElementById("repList"); if(!box) return;
+  box.innerHTML = data.order.map((id,i)=>{
+    const s=data.songs[id]; const active = id===data.current;
+    return `<div class="item">
+      <span class="ord">${i+1}</span>
+      <span class="nm ${active?'active':''}" data-open="${id}">${escapeHtml(s.title||"(sem nome)")}</span>
+      <button class="minibtn" data-up="${id}" ${i===0?'disabled style="opacity:.35"':''} aria-label="Subir">↑</button>
+      <button class="minibtn" data-down="${id}" ${i===data.order.length-1?'disabled style="opacity:.35"':''} aria-label="Descer">↓</button>
+      <button class="minibtn" data-rem="${id}" aria-label="Apagar" style="color:var(--c1)">×</button>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{ data.current=el.dataset.open; filter="todos"; save(); refreshAll(); });
+  const move=(id,d)=>{ const i=data.order.indexOf(id), j=i+d; if(j<0||j>=data.order.length) return;
+    [data.order[i],data.order[j]]=[data.order[j],data.order[i]]; save(); renderRepertorio(); renderSongSel(); };
+  box.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>move(b.dataset.up,-1));
+  box.querySelectorAll("[data-down]").forEach(b=>b.onclick=()=>move(b.dataset.down,1));
+  box.querySelectorAll("[data-rem]").forEach(b=>b.onclick=()=>{
+    if(data.order.length<=1){ alert("É a única música. Crie outra antes de apagar."); return; }
+    const id=b.dataset.rem; if(!confirm("Apagar “"+(data.songs[id].title||"")+"”?")) return;
+    delete data.songs[id]; data.order=data.order.filter(x=>x!==id);
+    if(data.current===id) data.current=data.order[0];
+    save(); refreshAll();
+  });
+}
+function applyTheme(){
+  document.documentElement.dataset.theme = data.theme==="light" ? "light" : "dark";
+  const b=document.getElementById("themeBtn"); if(b) b.textContent = data.theme==="light" ? "☀" : "☾";
+  const tc=document.querySelector('meta[name=theme-color]'); if(tc) tc.setAttribute("content", data.theme==="light"?"#F6F3EC":"#15171D");
+}
+function refreshAll(){
+  renderSongSel(); renderFilters(); renderLyrics(); renderSingers(); renderAssign(); renderRepertorio(); applyTheme();
+  const s=curSong();
+  document.getElementById("titleIn").value=s.title||"";
+  document.getElementById("keyIn").value=s.key||"";
+  document.getElementById("bpmIn").value=s.bpm||"";
+  document.getElementById("leadIn").value=s.lead||"";
+  document.getElementById("audioIn").value=s.audio||"";
+  document.getElementById("notesIn").value=s.notes||"";
   document.getElementById("bandIn").value=data.band||"";
-  document.getElementById("bandEyebrow").textContent=(data.band||"Grupo de louvor"); }
+  document.getElementById("bandEyebrow").textContent=(data.band||"Grupo de louvor");
+}
 
 (async function init(){
   data = await load() || defaults();
-  if(!data.band) data.band = "abba one";
-  if(!data.order) data.order=Object.keys(data.songs);
-  if(!data.current||!data.songs[data.current]) data.current=data.order[0];
+  migrate();
   wire(); refreshAll(); setMode(false); save();
 })();
 </script>
