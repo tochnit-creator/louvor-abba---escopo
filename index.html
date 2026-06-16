@@ -184,6 +184,18 @@
     width:34px;height:34px;border-radius:9px;font-size:15px;cursor:pointer;flex:none}
   .minibtn:hover{color:var(--text)}
 
+  /* ajuda */
+  .help .lead{color:var(--muted);font-size:14.5px;margin:0}
+  .help p{font-size:14.5px;color:var(--text);margin:0}
+  .help ol{margin:0;padding-left:20px}
+  .help li{margin:7px 0;font-size:14.5px}
+  .symtable{display:flex;flex-direction:column}
+  .symrow{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+  .symrow:last-child{border-bottom:0}
+  .symrow .s{font-size:21px;font-weight:800;color:var(--gold);width:30px;text-align:center;flex:none;line-height:1.3}
+  .symrow .d{font-size:14px;color:var(--muted);line-height:1.5}
+  .symrow .d b{color:var(--text);font-weight:600}
+
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
   /* ===== mobile-first / app ===== */
@@ -267,10 +279,11 @@
   <div class="modes" role="group" aria-label="Modo">
     <button id="mSing" aria-pressed="true">Cantar</button>
     <button id="mEdit" aria-pressed="false">Editar</button>
+    <button id="mHelp" aria-pressed="false">Como usar</button>
   </div>
 
   <!-- SONG SWITCHER -->
-  <div class="bar">
+  <div class="bar" id="songBar">
     <button class="btn sm" id="prevSong" aria-label="Música anterior" title="Anterior">◀</button>
     <select id="songSel" aria-label="Música" style="flex:1;min-width:120px"></select>
     <button class="btn sm" id="nextSong" aria-label="Próxima música" title="Próxima">▶</button>
@@ -374,6 +387,77 @@
         <button class="btn sm ghost" id="importBtn">Colar backup</button>
         <button class="btn sm ghost" id="delSong" style="color:var(--c1);float:right">Apagar esta música</button>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== HELP MODE ===== -->
+  <section id="helpView" class="hide help">
+    <div class="card">
+      <h2>Para que serve</h2>
+      <p class="lead">Este painel mostra a letra das músicas marcando <b>quem canta cada parte</b>, <b>quando entrar</b>, a <b>dinâmica</b> (crescer, sustentar…) e <b>quantas vezes</b> cada trecho repete. Cada pessoa toca no próprio nome e vê só a parte dela.</p>
+    </div>
+
+    <div class="card">
+      <h2>Os modos</h2>
+      <div class="symtable">
+        <div class="symrow"><span class="s">🎤</span><div class="d"><b>Cantar</b> — a tela do dia do culto. Toque no seu nome para ver só a sua parte, ou em <b>Todos</b> para a música inteira.</div></div>
+        <div class="symrow"><span class="s">✏️</span><div class="d"><b>Editar</b> — onde você prepara as músicas: cola a letra, marca quem canta, a dinâmica e as repetições.</div></div>
+        <div class="symrow"><span class="s">❔</span><div class="d"><b>Como usar</b> — esta tela de ajuda.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Os símbolos</h2>
+      <p class="hint">Aparecem em dourado, ao lado da letra, e mostram a dinâmica de cada trecho.</p>
+      <div class="symtable">
+        <div class="symrow"><span class="s">●</span><div class="d"><b>Entrada</b> — quem começa aquele trecho. Geralmente fica só na primeira linha de quem entra.</div></div>
+        <div class="symrow"><span class="s">✚</span><div class="d"><b>Todos</b> — grade cheia, o grupo inteiro canta junto. Aparece sozinho quando a linha está marcada como “Todos”.</div></div>
+        <div class="symrow"><span class="s">▲</span><div class="d"><b>Crescer</b> — aumentar a intensidade / o volume.</div></div>
+        <div class="symrow"><span class="s">▼</span><div class="d"><b>Diminuir</b> — suavizar.</div></div>
+        <div class="symrow"><span class="s">~</span><div class="d"><b>Sustentar</b> — segurar / prolongar a nota.</div></div>
+        <div class="symrow"><span class="s">‖</span><div class="d"><b>Respiro</b> — pausa antes de entrar.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Cores e filtro por nome</h2>
+      <p>Cada voz tem uma cor. No modo Cantar, os nomes ficam na barra do topo. Tocar num nome mostra <b>só as frases daquela pessoa</b> (mais os trechos de “Todos”, porque ela canta junto). O botão <b>Mostrar a letra inteira</b> exibe tudo, deixando a parte dela em destaque e o resto esmaecido — útil pra não perder o lugar.</p>
+    </div>
+
+    <div class="card">
+      <h2>Repetições</h2>
+      <div class="symtable">
+        <div class="symrow"><span class="s" style="font-size:14px"><span class="rep" style="margin:0">2×</span></span><div class="d"><b>Pílula na frase</b> — uma frase específica que repete (ex.: “Eu vou orar” 4×).</div></div>
+        <div class="symrow"><span class="s">↺</span><div class="d"><b>“repete N×” embaixo da estrofe</b> — quando a estrofe inteira repete junto, aparece um marcador único, em vez de poluir cada linha.</div></div>
+      </div>
+      <p class="hint" style="margin-top:10px">No Editar: “Repete esta frase” muda uma linha; “Estrofe inteira repete” muda a estrofe toda de uma vez.</p>
+    </div>
+
+    <div class="card">
+      <h2>Preparar uma música (passo a passo)</h2>
+      <ol>
+        <li>Em <b>Editar</b>, dê o nome e (se quiser) o tom, BPM e quem puxa.</li>
+        <li>Cole a letra — <b>uma frase por linha</b> e uma <b>linha em branco</b> entre as estrofes.</li>
+        <li>Toque em <b>Carregar letra</b>.</li>
+        <li>Dê nome às estrofes (Verso, Refrão…) e marque quem canta cada linha (Todos ou os nomes).</li>
+        <li>Acrescente as <b>marcações</b> (●▲▼~‖) e as <b>repetições</b> onde precisar.</li>
+      </ol>
+      <p class="hint" style="margin-top:8px">Dica: use a <b>Marcação rápida</b> — escolha uma pessoa e vá tocando nas frases dela em sequência. É bem mais rápido.</p>
+    </div>
+
+    <div class="card">
+      <h2>Organização e repertório</h2>
+      <p>No card <b>Repertório / ordem do culto</b> você coloca as músicas na ordem do dia (setas ↑ ↓), abre tocando no nome e apaga no ×. No modo Cantar, os botões <b>◀ ▶</b> passam de uma música para a próxima. Use <b>+ Nova</b> para criar e <b>Duplicar música</b> para partir de uma parecida.</p>
+    </div>
+
+    <div class="card">
+      <h2>Áudio, observações e impressão</h2>
+      <p><b>Link de áudio</b>: se for um arquivo (mp3, m4a…), toca dentro do painel; se for YouTube/link, abre um botão “Ouvir referência”. <b>Observações / final</b>: caixa livre pra coisas como “Refrão 3× no final” ou “volta ao refrão / Coda”. <b>Imprimir</b> gera uma folha bonita (dá pra salvar como PDF) — ative “gráficos de plano de fundo” pra sair colorida.</p>
+    </div>
+
+    <div class="card">
+      <h2>Salvar, backup e app no celular</h2>
+      <p>Tudo é salvo automaticamente. Para garantir e passar a outro celular, use <b>Baixar backup</b> (arquivo) e <b>Abrir backup</b>. Para virar um app: abra o arquivo no navegador do celular e use <b>Adicionar à tela inicial</b>. Os botões <b>☾/☀</b> trocam o tema (claro/escuro) e <b>⛶</b> abre em tela cheia.</p>
     </div>
   </section>
 
@@ -770,24 +854,28 @@ function renderAssign(){
 }
 
 /* ---------- mode + events ---------- */
-function setMode(edit){
-  document.getElementById("mSing").setAttribute("aria-pressed",!edit);
-  document.getElementById("mEdit").setAttribute("aria-pressed",edit);
-  document.getElementById("singView").classList.toggle("hide",edit);
-  document.getElementById("editView").classList.toggle("hide",!edit);
-  refreshAll();
+function setMode(mode){ // 'sing' | 'edit' | 'help'
+  document.getElementById("mSing").setAttribute("aria-pressed", mode==="sing");
+  document.getElementById("mEdit").setAttribute("aria-pressed", mode==="edit");
+  document.getElementById("mHelp").setAttribute("aria-pressed", mode==="help");
+  document.getElementById("singView").classList.toggle("hide", mode!=="sing");
+  document.getElementById("editView").classList.toggle("hide", mode!=="edit");
+  document.getElementById("helpView").classList.toggle("hide", mode!=="help");
+  document.getElementById("songBar").classList.toggle("hide", mode==="help");
+  if(mode!=="help") refreshAll();
 }
 
 function wire(){
-  document.getElementById("mSing").onclick=()=>setMode(false);
-  document.getElementById("mEdit").onclick=()=>setMode(true);
+  document.getElementById("mSing").onclick=()=>setMode("sing");
+  document.getElementById("mEdit").onclick=()=>setMode("edit");
+  document.getElementById("mHelp").onclick=()=>setMode("help");
   document.getElementById("showAll").onchange=renderLyrics;
 
   document.getElementById("songSel").onchange=(e)=>{ data.current=e.target.value; filter="todos"; save(); refreshAll(); };
   document.getElementById("newSong").onclick=()=>{
     const id=uid(); data.songs[id]={id,title:"Nova música",key:"",bpm:"",lead:"",audio:"",notes:"",lines:[]};
     data.order.push(id); data.current=id; filter="todos";
-    save(); setMode(true); refreshAll();
+    save(); setMode("edit"); refreshAll();
   };
   const go=(d)=>{ const i=data.order.indexOf(data.current); const j=i+d;
     if(j<0||j>=data.order.length) return; data.current=data.order[j]; filter="todos"; save(); refreshAll(); };
@@ -908,6 +996,6 @@ function refreshAll(){
 (async function init(){
   data = await load() || defaults();
   migrate();
-  wire(); refreshAll(); setMode(false); save();
+  wire(); refreshAll(); setMode("sing"); save();
 })();
 </script>
