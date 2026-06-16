@@ -124,10 +124,37 @@
   .hide{display:none!important}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
   @media (max-width:480px){ h1{font-size:25px} .ly{font-size:20px} }
+
+  /* ===== folha de impressão (premium) ===== */
+  #printSheet{display:none}
+  @media print{
+    @page{ margin:16mm 18mm; }
+    html,body{background:#fff !important}
+    body{padding:0 !important}
+    .wrap{max-width:none;padding:0}
+    .wrap > *:not(#printSheet){display:none !important}
+    #printSheet{display:block !important;color:#1b1b1b;font-family:"Inter",sans-serif}
+  }
+  #printSheet .p-head{text-align:center;border-bottom:1.5px solid #cbbf9e;padding-bottom:16px;margin-bottom:6px}
+  #printSheet .p-band{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#9a7b2e;font-weight:700}
+  #printSheet .p-title{font-family:"Fraunces",serif;font-weight:500;font-size:34px;color:#171717;margin:8px 0 4px;line-height:1.1}
+  #printSheet .p-meta{font-size:11px;letter-spacing:.04em;color:#8a8273;text-transform:uppercase}
+  #printSheet .p-legend{display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:center;
+    font-size:11px;color:#5a5343;margin:14px 0 4px;padding:8px 0;border-bottom:1px solid #e7e0cf}
+  #printSheet .p-legend b{color:#9a7b2e;font-weight:800;margin-right:3px}
+  #printSheet .p-voices{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;margin:12px 0 20px;font-size:12px}
+  #printSheet .p-voice{display:inline-flex;align-items:center;gap:7px}
+  #printSheet .p-sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  #printSheet .p-spk{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin:13px 0 2px}
+  #printSheet .p-line{font-size:15.5px;line-height:1.55;color:#1b1b1b;padding-left:2px}
+  #printSheet .p-cue{font-weight:800;color:#9a7b2e;margin-right:8px;letter-spacing:2px}
+  #printSheet .p-gap{height:13px}
+  #printSheet .p-foot{margin-top:26px;padding-top:10px;border-top:1px solid #e7e0cf;
+    text-align:center;font-size:10.5px;letter-spacing:.04em;color:#9a9384}
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Grupo de louvor</p>
+  <p class="eyebrow" id="bandEyebrow">Grupo de louvor</p>
   <h1 id="appTitle">Painel de vozes</h1>
   <p class="sub">Toque no seu nome para ver só a sua parte, ou em <b>Todos</b> para ver a música inteira.</p>
 
@@ -140,6 +167,7 @@
   <div class="bar">
     <select id="songSel" aria-label="Música" style="flex:1;min-width:160px"></select>
     <button class="btn sm" id="newSong">+ Nova</button>
+    <button class="btn sm" id="printBtn">Imprimir</button>
   </div>
 
   <!-- ===== SING MODE ===== -->
@@ -161,6 +189,12 @@
 
   <!-- ===== EDIT MODE ===== -->
   <section id="editView" class="hide">
+    <div class="card">
+      <h2>Grupo</h2>
+      <p class="hint">Aparece no topo do painel e no cabeçalho da impressão.</p>
+      <label class="fld" for="bandIn">Nome da banda / grupo</label>
+      <input type="text" id="bandIn" placeholder="Ex.: abba one">
+    </div>
     <div class="card">
       <h2>Música</h2>
       <p class="hint">Dê um nome e cole a letra. Cada linha vira uma parte que você atribui a um cantor.</p>
@@ -203,6 +237,8 @@
       </div>
     </div>
   </section>
+
+  <div id="printSheet"></div>
 
   <p class="footnote">Feito para o seu grupo • funciona offline depois de aberto</p>
 </div>
@@ -250,7 +286,7 @@ function defaults(){
   const singers = ["Voz 1","Voz 2","Voz 3","Voz 4","Voz 5","Voz 6"]
     .map((n,i)=>({id:uid(),name:n,color:COLORS[i]}));
   const sid = uid();
-  return { singers, songs:{[sid]:{id:sid,title:"Minha música",lines:[]}}, order:[sid], current:sid };
+  return { band:"abba one", singers, songs:{[sid]:{id:sid,title:"Minha música",lines:[]}}, order:[sid], current:sid };
 }
 function curSong(){ return data.songs[data.current]; }
 function singerById(id){ return data.singers.find(s=>s.id===id); }
@@ -340,7 +376,47 @@ function renderLyrics(){
   out.innerHTML = html;
 }
 
-/* ---------- render: EDIT ---------- */
+/* ---------- impressão ---------- */
+function printCues(l){
+  const parts=[];
+  if(l.todos) parts.push("✚");
+  (l.cues||[]).forEach(k=>{const c=CUES.find(x=>x.k===k); if(c) parts.push(c.s);});
+  return parts.length ? `<span class="p-cue">${parts.join(" ")}</span>` : "";
+}
+function sigOf(l){ return l.todos ? "TODOS" : (l.singers||[]).slice().sort().join(","); }
+function buildPrintSheet(){
+  const song=curSong(); const lines=song.lines||[];
+  const voices = data.singers.map(s=>
+    `<span class="p-voice"><span class="p-sw" style="background:${s.color}"></span>${escapeHtml(s.name)}</span>`).join("");
+  let body=""; let prevSig=null; let lastContent=false;
+  for(const l of lines){
+    if(l.brk){ if(lastContent){ body+=`<div class="p-gap"></div>`; lastContent=false; prevSig=null; } continue; }
+    const sig=sigOf(l);
+    if(sig!==prevSig){
+      let label="", color="#9a7b2e";
+      if(l.todos){ label="Todos"; }
+      else { const ns=(l.singers||[]).map(singerById).filter(Boolean);
+             if(ns.length){ label=ns.map(n=>n.name).join(" + "); color=ns[0].color; } }
+      if(label) body+=`<div class="p-spk" style="color:${color}">${escapeHtml(label)}</div>`;
+      prevSig=sig;
+    }
+    body+=`<div class="p-line">${printCues(l)}${escapeHtml(l.text)}</div>`;
+    lastContent=true;
+  }
+  if(!body) body=`<div class="p-line" style="color:#999">Sem letra carregada nesta música.</div>`;
+  const leg = [["●","entrada"],["✚","todos"],["▲","crescer"],["▼","diminuir"],["~","sustentar"],["‖","respiro"]]
+    .map(([s,t])=>`<span><b>${s}</b>${t}</span>`).join("");
+  document.getElementById("printSheet").innerHTML = `
+    <div class="p-head">
+      <div class="p-band">${escapeHtml(data.band||"")}</div>
+      <div class="p-title">${escapeHtml(song.title||"Sem título")}</div>
+      <div class="p-meta">Mapa de vozes</div>
+    </div>
+    <div class="p-legend">${leg}</div>
+    <div class="p-voices">${voices}</div>
+    ${body}
+    <div class="p-foot">${escapeHtml(data.band||"")} &middot; Painel de Louvor</div>`;
+}
 function renderSingers(){
   const box=document.getElementById("singerList");
   box.innerHTML = data.singers.map((s,i)=>`
@@ -420,6 +496,9 @@ function wire(){
     save(); setMode(true); refreshAll();
   };
   document.getElementById("titleIn").oninput=(e)=>{ curSong().title=e.target.value; save(); renderSongSel(); };
+  document.getElementById("bandIn").oninput=(e)=>{ data.band=e.target.value; save();
+    document.getElementById("bandEyebrow").textContent=(data.band||"Grupo de louvor"); };
+  document.getElementById("printBtn").onclick=()=>{ buildPrintSheet(); window.print(); };
   document.getElementById("loadLyrics").onclick=()=>{
     const t=document.getElementById("lyricsIn").value;
     if(!t.trim()){ document.getElementById("loadWarn").textContent="Cole a letra primeiro."; return; }
@@ -465,10 +544,13 @@ function wire(){
   };
 }
 function refreshAll(){ renderSongSel(); renderFilters(); renderLyrics(); renderSingers(); renderAssign();
-  document.getElementById("titleIn").value=curSong().title; }
+  document.getElementById("titleIn").value=curSong().title;
+  document.getElementById("bandIn").value=data.band||"";
+  document.getElementById("bandEyebrow").textContent=(data.band||"Grupo de louvor"); }
 
 (async function init(){
   data = await load() || defaults();
+  if(!data.band) data.band = "abba one";
   if(!data.order) data.order=Object.keys(data.songs);
   if(!data.current||!data.songs[data.current]) data.current=data.order[0];
   wire(); refreshAll(); setMode(false); save();
